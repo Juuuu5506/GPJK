@@ -92,7 +92,48 @@ public class OwnInout implements Inout {
 	 * Dort wird der Netzplan hineingeschrieben.
 	 */
 	public void printFinal(Graph graph, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+		ArrayList<Node> starters = graph.getStartNodes();
+		ArrayList<Node> enders = graph.getEndNodes();
 		PrintWriter pw = new PrintWriter(fileName, "UTF-8");
+		pw.println(heading);
+		pw.println();
+		pw.println("Vorgangsnummer; Vorgangsbezeichnung; D; FAZ; FEZ; SAZ; SEZ; GP; FP");
+		pw.println(graph.toString());
+		
+		pw.println();
+		pw.print("Anfangsvorgaenge: ");
+		for(int i = 0; i < starters.size(); i++) {
+			pw.print(starters.get(i).getId());
+			if(i < starters.size()-1) {
+				pw.print(", ");
+			}
+		}
+		
+		pw.println();
+		pw.print("Endvorgaenge: ");
+		for(int i = 0; i < enders.size(); i++) {
+			pw.print(enders.get(i).getId());
+			if(i < enders.size()-1) {
+				pw.print(", ");
+			}
+		}
+		
+		pw.println();
+		pw.print("Gesamtdauer: ");
+		pw.print(graph.getMaxAusf());
+		
+		pw.println();
+		pw.println();
+		pw.println("Kritische Pfade: ");
+		for(ArrayList<Node> aln: graph.getCriticalPaths()) {
+			for(int i = 0; i < aln.size(); i++) {
+				pw.print(aln.get(i).getId());
+				if(i < aln.size()-1) {
+					pw.print("->");
+				}
+			}
+			pw.println();
+		}
 		pw.close();
 	}
 	

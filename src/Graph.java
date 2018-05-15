@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Graph {
 	private ArrayList<Node> nodes;
 	private ArrayList<ArrayList<Node>> criticalPaths = new ArrayList<>();
+	private int maxAusf;
 	
 	public Graph( ArrayList<Node> nodes) {
 		for(Node n : nodes) {
@@ -35,6 +36,11 @@ public class Graph {
 		return starters;
 	}
 	
+	public ArrayList<Node> getNodes() {
+		return nodes;
+	}
+
+
 	public ArrayList<Node> getEndNodes() {
 		ArrayList <Node> enders = new ArrayList<>();
 		for(Node n: nodes) {
@@ -57,6 +63,17 @@ public class Graph {
 		return unvisited;
 	}
 	
+	public ArrayList<Node> missedSecPhase() {
+		ArrayList<Node> missed = new ArrayList<>();
+		
+		for(Node n: nodes) {
+			if(n.getSaz() == -1) {
+				missed.add(n);
+			}
+		}
+		return missed;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(Node n : nodes) {
@@ -64,4 +81,17 @@ public class Graph {
 		}
 		return sb.toString();
 	}
+
+	public ArrayList<ArrayList<Node>> getCriticalPaths() {
+		return criticalPaths;
+	}
+
+	public int getMaxAusf() {
+		return maxAusf;
+	}
+
+	public void setMaxAusf(int maxAusf) {
+		this.maxAusf = maxAusf;
+	}
+
 }
