@@ -5,6 +5,9 @@ public class Graph {
 	private ArrayList<ArrayList<Node>> criticalPaths = new ArrayList<>();
 	
 	public Graph( ArrayList<Node> nodes) {
+		for(Node n : nodes) {
+			System.out.println(n.toString());
+		}
 		this.nodes = nodes;
 	}
 	
@@ -16,6 +19,7 @@ public class Graph {
 		for(Node n : nodes) {
 			if(n.getId() == id) {
 				return n;
+				
 			}
 		}
 		return null;
@@ -39,5 +43,25 @@ public class Graph {
 			}
 		}
 		return enders;
+	}
+	
+	public ArrayList<Node> unvisitedNodes() {
+		ArrayList<Node> unvisited = new ArrayList<>();
+		
+		for(Node n: nodes) {
+			if(n.getFez() == -1) {
+				unvisited.add(n);
+			}
+		}
+		
+		return unvisited;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(Node n : nodes) {
+			sb.append(n.toString()+"\n");
+		}
+		return sb.toString();
 	}
 }

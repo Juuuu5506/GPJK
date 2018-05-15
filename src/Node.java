@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Node {
 
@@ -5,37 +6,151 @@ public class Node {
 	private String name;
 	private int d;
 	private int faz;
-	private int fez;
-	private int saz;
+	private int fez = -1;
+	private int saz = -1;
 	private int sez;
-	private int gp;
+	private int gp = -1;
 	private int fp;
-	private int[] vorgID;
-	private int[] nachfID;
+	private ArrayList<Integer> vorgID = new ArrayList<>();
+	private ArrayList<Integer> nachfID = new ArrayList<>();
 	private boolean critical = false;
 	private boolean startingNode;
 	private boolean endingNode;
+	private int lastFazIncrease = 0; // Um Zyklen aufzuspüren
+	private int secLastFazIncrease = 0;
+	private int thrLastFazIncrease = 0;
+	private int increased = 0;
 	
-	public Node(int id, String name, int d, int[] vorg, int[] nachf) {
+	public Node(int id, String name, int d, ArrayList<Integer> vorg, ArrayList<Integer> nachf) {
 		this.id = id;
 		this.name = name;
 		this.d = d;
-		this.vorgID = vorg;
-		this.nachfID = nachf;
+		this.vorgID.addAll(vorg);
+		this.nachfID.addAll(nachf);
 		
-		if(this.vorgID.length == 0) {
-			startingNode = true;
+		if(this.vorgID.size() == 0) {
+			this.startingNode = true;
+			this.faz = 0;
 		}else {
-			startingNode = false;
+			this.startingNode = false;
 		}
 		
-		if(this.nachfID.length == 0) {
+		if(this.nachfID.size() == 0) {
 			endingNode = true;
 		} else {
 			endingNode = false;
 		}
 	}
 
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		if(fez == -1) { //Es wurden noch keine Berechnungen vorgenommen.
+			sb.append(id+"; ");
+			sb.append(name+"; ");
+			sb.append(d+"; ");
+			if(vorgID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < vorgID.size(); i++) {
+				sb.append(vorgID.get(i));
+				if(i < (vorgID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			sb.append("; ");
+			if(nachfID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < nachfID.size(); i++) {
+				sb.append(nachfID.get(i));
+				if(i < (nachfID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			return sb.toString();
+			
+			
+		} else if(saz == -1) { //Es wurde vorwärts aber noch nicht rückwärts gerechnet.
+			sb.append(id+"; ");
+			sb.append(name+"; ");
+			sb.append(d+"; ");
+			if(vorgID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < vorgID.size(); i++) {
+				sb.append(vorgID.get(i));
+				if(i < (vorgID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			sb.append("; ");
+			if(nachfID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < nachfID.size(); i++) {
+				sb.append(nachfID.get(i));
+				if(i < (nachfID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			
+			sb.append("; "+ faz);
+			sb.append("; "+ fez);
+			return sb.toString();
+			
+			
+		} else if(gp == -1) {  //Es wurde rückwärts gerechnet aber die Puffer fehlen noch. 
+			sb.append(id+"; ");
+			sb.append(name+"; ");
+			sb.append(d+"; ");
+			if(vorgID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < vorgID.size(); i++) {
+				sb.append(vorgID.get(i));
+				if(i < (vorgID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			sb.append("; ");
+			if(nachfID.size() == 0) {
+				sb.append("-");
+			}
+			for(int i = 0; i < nachfID.size(); i++) {
+				sb.append(nachfID.get(i));
+				if(i < (nachfID.size()-1)) {
+					sb.append(", ");
+				}
+			}
+			return sb.toString();
+		}
+		return null;
+	}
+	
+	/**
+	 * Gibt an, ob die Gefahr eines Zykluses besteht.
+	 * @return true oder false
+	 */
+	public boolean cycleDanger() {
+		
+		/* Wenn sich drei mal nacheinander der FAZ um mindestens seine Bearbeitungsdauer erhöht, ist
+		 * die Wahrscheinlichkeit sehr hoch, dass es sich um einen Zyklus handelt. Falls d jedoch klein ist,
+		 * kann es schnell passieren, dass d drei mal nacheinander überboten wurde. Für diesen Fall ist eine Mindestgrenze 
+		 * von 10 miteingebaut.
+		 */
+		if(increased < 3) {
+			return false;
+		}
+		if(((thrLastFazIncrease >= d) && (thrLastFazIncrease >= 10)) &&
+			((secLastFazIncrease >= d) && (secLastFazIncrease >= 10)) &&
+			((lastFazIncrease >= d) && (lastFazIncrease >= 10)) ||
+								increased > 50) {
+			return true;			
+		} else {
+			return false;
+		}
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -65,7 +180,14 @@ public class Node {
 	}
 
 	public void setFaz(int faz) {
-		this.faz = faz;
+		thrLastFazIncrease = secLastFazIncrease;
+		secLastFazIncrease = lastFazIncrease;
+		lastFazIncrease = this.faz-faz;
+		if(faz > this.faz) {
+			this.faz = faz;
+		}
+		increased++;
+		
 	}
 
 	public int getFez() {
@@ -108,19 +230,19 @@ public class Node {
 		this.fp = fp;
 	}
 
-	public int[] getVorgID() {
+	public ArrayList<Integer> getVorgID() {
 		return vorgID;
 	}
 
-	public void setVorgID(int[] vorgID) {
+	public void setVorgID(ArrayList<Integer> vorgID) {
 		this.vorgID = vorgID;
 	}
 
-	public int[] getNachfID() {
+	public ArrayList<Integer> getNachfID() {
 		return nachfID;
 	}
 
-	public void setNachfID(int[] nachfID) {
+	public void setNachfID(ArrayList<Integer> nachfID) {
 		this.nachfID = nachfID;
 	}
 
@@ -146,5 +268,21 @@ public class Node {
 
 	public void setEndingNode(boolean endingNode) {
 		this.endingNode = endingNode;
+	}
+
+	public int getLastFazIncrease() {
+		return lastFazIncrease;
+	}
+
+	public void setLastFazIncrease(int lastFazIncrease) {
+		this.lastFazIncrease = lastFazIncrease;
+	}
+
+	public int getSecLastFazIncrease() {
+		return secLastFazIncrease;
+	}
+
+	public void setSecLastFazIncrease(int secLastFazIncrease) {
+		this.secLastFazIncrease = secLastFazIncrease;
 	}
 }
