@@ -1,0 +1,13 @@
+//******************************************
+//+ Zwei kreuzende kritische Pfade
+// Ueberprueft die richtige Funktionsweise des Programm, wenn zwei kritische Pfade sich kreuzen.
+//******************************************
+//Vorgangsnummer; Vorgangsbezeichnung; Dauer; Vorgänger; Nachfolger
+1; Start; 1; -; 2, 5
+2; Anfang erster Pfad; 1; 1; 3
+3; Mitte erster Pfad; 1; 2; 4, 7
+4; Ende erster Pfad; 1; 3; 8
+5; Anfang zweiter Pfad; 1; 1; 6 
+6; Mitte zweiter Pfad; 1; 5; 7
+7; Ende zweiter Pfad ; 1; 6, 3; 8
+8; Zusammenfuerung; 1; 4,7 ; -

@@ -14,7 +14,6 @@ public class OwnController implements Controller {
 
 	private String fileName;
 	private String fileWithoutEnding;
-	private ArrayList<Integer> warnings = new ArrayList<>();
 
 	@Override
 	public void startProgram(String fileName) {
@@ -103,7 +102,6 @@ public class OwnController implements Controller {
 			next.remove(n);
 			counter++;
 		}
-		System.out.println(graph.toString());
 		if (counter == Integer.MAX_VALUE) {
 			try {
 				inout.printException("Es gab einen Fehler mit einem unentdeckten Zyklus", fileWithoutEnding + ".err");
@@ -166,7 +164,6 @@ public class OwnController implements Controller {
 		}
 
 		if (graph.missedSecPhase().size() > 0 || counter == 400) {
-			System.out.println("Es existiert ein Fehler in den Vorgängerangaben.");
 			try {
 				inout.printException("Es existiert ein Fehler in den Vorgängerangaben der Knoten.",
 						fileWithoutEnding + ".err");
@@ -175,7 +172,6 @@ public class OwnController implements Controller {
 			}
 		}
 
-		System.out.println(graph.toString());
 
 		// Phase 3
 		int faz;
@@ -200,9 +196,7 @@ public class OwnController implements Controller {
 				s.setCritical(true);
 			}
 		}
-		System.out.println("Phase 3");
-		System.out.println(graph.toString());
-
+		
 		// Suche nach Kritischen Pfaden
 
 		ArrayList<Node> criticalsLeft = new ArrayList<>();
@@ -233,6 +227,7 @@ public class OwnController implements Controller {
 				if (!ending) {
 					if (tn.isEndingNode()) {
 						ending = true;
+						crPath.add(tn);
 						tn = mid;
 					} else {
 						for (int i : tn.getNachfID()) {
@@ -249,6 +244,7 @@ public class OwnController implements Controller {
 				if (!beginning) {
 
 					if (tn.isStartingNode()) {
+						crPath.add(0, tn);
 						beginning = true;
 					} else {
 						for (int i : tn.getVorgID()) {
@@ -264,10 +260,6 @@ public class OwnController implements Controller {
 				}
 
 				graph.addCritical(crPath);
-				System.out.println();
-				for (Node sy : crPath) {
-					System.out.print(sy.getId() + "->");
-				}
 				crPath.clear();
 				beginning = false;
 				ending = false;
@@ -282,8 +274,56 @@ public class OwnController implements Controller {
 
 	}
 
+	/**
+	 * Überprüft ob ein Zyklus um Knoten @param n existiert.
+	 */
 	public void lookForCycle(Node n) {
-		ArrayList<Node> already = new ArrayList<>();
+		ArrayList<Node> nodes = new ArrayList<>();
+		nodes.add(n);
+		if(backtrackingCycle(n, nodes)){
+			try {
+				inout.printCycleException(nodes, fileWithoutEnding + ".err");
+				System.exit(0);
+			} catch (FileNotFoundException | UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		} 
+	}
+	
+	/**
+	 * Die Funktion führt eine Tiefensuche im Verzweigungsbaum aus.
+	 * Dabei sucht sie @param n und fügt den durchlaufenen Pfad @param nodes zu.
+	 * Falls n gefunden wurde gibt es @return true zurück und in nodes steht der Pfad
+	 * der dorthin führt.
+	 */
+	public boolean backtrackingCycle(Node n, ArrayList<Node> nodes) {
+		if(nodes.get(nodes.size()-1).getNachfID().size() == 0) {
+			return false;
+		}
+		for(int i: nodes.get(nodes.size()-1).getNachfID()) {
+			nodes.add(graph.getNodeByID(i));
+			if(nodes.get(nodes.size()-1) == n) {
+				return true;
+			} else {
+				if(backtrackingCycle(n, nodes)) {
+					return true;
+				} else {
+					nodes.remove(nodes.size()-1);
+				}
+			}
+		}
+		return false;
+	}
+		/*
+		 * nodes.remove(nodes.size()-1);
+		return false;
+	} else {
+		for(int i: nodes.get(nodes.size()-1).getNachfID()) {
+			
+		}
+	}*/
+		
+		/*ArrayList<Node> already = new ArrayList<>();
 		ArrayList<Node> next = new ArrayList<>();
 		ArrayList<Node> cycle = new ArrayList<>();
 		ArrayList<Integer> ids = new ArrayList<>();
@@ -301,7 +341,7 @@ public class OwnController implements Controller {
 					next.clear();
 
 				} else { // Fuer den Fall, dass der Knoten noch nicht im Zyklus aufgenommen wurde, jedoch
-							// schon zwei mal
+									// schon zwei mal
 					cycle.add(tmp); // ueberrueft wurde, wird er nun dem Zyklus zugefuegt.
 					ids.addAll(tmp.getNachfID()); // Alle Folgeknoten werden hinzugefügt.
 					for (int i : ids) {
@@ -311,7 +351,7 @@ public class OwnController implements Controller {
 					next.remove(tmp);
 				}
 			} else {
-				already.add(tmp); // Wird der Knote das erste Mal ueberlaufe, muss er already hinzugefuegt werden.
+				already.add(tmp); // Wird der Knote das erste Mal ueberlaufen, muss er already hinzugefuegt werden.
 				ids.addAll(tmp.getNachfID()); // Alle Folgeknoten werden
 				for (int i : ids) {
 					next.add(graph.getNodeByID(i));
@@ -333,5 +373,6 @@ public class OwnController implements Controller {
 			}
 		}
 	}
+	*/
 
 }

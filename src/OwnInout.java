@@ -28,40 +28,34 @@ public class OwnInout implements Inout {
 			String line = br.readLine();
 			while (line != null) {
 				row+=1;
-				System.out.println(row);
 				line.trim();
 				if (line.trim().isEmpty()) {
 
 				} else if (line.trim().startsWith("//+")) {
-					// Es ist die Überschrift
+					// Es ist die ueberschrift
 					heading += " "+line.substring(3).trim();
 				} else if (line.trim().startsWith("//")) {
-					System.out.println("Im Kommentar");
 					// Es ist ein Kommentar
 				} else {
 					// Ein Knoten
 					splited = line.split(";");
 					if (splited.length < 5) {
-						System.out.println("Bin in unter 5");
 
 						throw new SyntaxException(row+"");
 						// Schwerwiegende fehlerhafte Eingabe der Semikoli.
-						// Wäre es mehr als fünf würde der Rest ignoriert werden.
+						// Waere es mehr als fuenf wuerde der Rest ignoriert werden.
 					} else {
 						id = Integer.parseInt(splited[0].trim());
 						if(id < 0) {
-							System.out.println("Bin in id");
 							throw new SyntaxException(row+"");
 						}
 						bez = splited[1].trim();
 						d = Integer.parseInt(splited[2].trim());
 						if(d < 0) {
-							System.out.println("Bin in d");
-
 							throw new SyntaxException(row+"");
 						}
 						if (splited[3].trim().equals("-")) {
-							//Kein Vorgängerknoten
+							// Kein Vorgaengerknoten
 						} else {
 							hilfsString = splited[3].split(",");
 							for (String s : hilfsString) {
@@ -100,7 +94,7 @@ public class OwnInout implements Inout {
 
 	@Override
 	/**
-	 * Erstellt eine Datei mit dem übergebenen @fileName.
+	 * Erstellt eine Datei mit dem uebergebenen @fileName.
 	 * Dort wird der Netzplan hineingeschrieben.
 	 */
 	public void printFinal(Graph graph, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
@@ -167,7 +161,7 @@ public class OwnInout implements Inout {
 		PrintWriter pw = new PrintWriter(".\\Ergebnisse\\"+fileName, "UTF-8");
 		pw.println(heading);
 		pw.println();
-		pw.println("Berechnung nicht möglich");
+		pw.println("Berechnung nicht moeglich");
 		pw.print("Zyklus erkannt: ");
 		for(int i = 0; i < path.size(); i++) {
 			pw.print(path.get(i).getId());
