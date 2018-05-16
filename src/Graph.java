@@ -5,15 +5,20 @@ public class Graph {
 	private ArrayList<ArrayList<Node>> criticalPaths = new ArrayList<>();
 	private int maxAusf;
 	
-	public Graph( ArrayList<Node> nodes) {
+	public Graph( ArrayList<Node> nodes) throws SameIDException {
+		ArrayList<Integer> ids = new ArrayList<>();
 		for(Node n : nodes) {
-			System.out.println(n.toString());
+			if(ids.contains(n.getId())) {
+				throw new SameIDException(""+n.getId());
+			}
+			ids.add(n.getId());
 		}
 		this.nodes = nodes;
 	}
 	
 	public void addCritical(ArrayList<Node> critical) {
-		criticalPaths.add(critical);
+		ArrayList<Node> cr = new ArrayList<>(critical);
+		criticalPaths.add(cr);
 	}
 	
 	public Node getNodeByID(int id) {

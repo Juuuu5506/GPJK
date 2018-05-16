@@ -1,7 +1,8 @@
 //*************************************
 //+ Erstes Beispiel
-//+ weitere Überschrift
+//+ weitere Ueberschrift
 //*************************************
+// In diesem Test wird die normale Funktionsweise des Programms und der Umgang mit Ueberschriften in mehreren Zeilen getestet.
 //Vorgangsnummer; Vorgangsbezeichnung; Dauer; Vorgänger; Nachfolger
 
 1; Anfang; 5; -; 2, 4

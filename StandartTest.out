@@ -1,0 +1,15 @@
+ Erstes Beispiel weitere Ueberschrift
+
+Vorgangsnummer; Vorgangsbezeichnung; D; FAZ; FEZ; SAZ; SEZ; GP; FP
+1; Anfang; 5; -; 2, 4; 0; 5; 0; 5; 0; 0
+2; Mittelteil; 1; 1; 3; 5; 6; 5; 6; 0; 0
+3; Fast Fertig; 42; 2; 4; 6; 48; 6; 48; 0; 0
+4; Schluss; 1; 1, 3; -; 48; 49; 48; 49; 0; 0
+
+
+Anfangsvorgaenge: 1
+Endvorgaenge: 4
+Gesamtdauer: 49
+
+Kritische Pfade: 
+1->2->3->4

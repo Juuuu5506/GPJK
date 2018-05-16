@@ -135,27 +135,8 @@ public class Node {
 		sb.append(id+"; ");
 		sb.append(name+"; ");
 		sb.append(d+"; ");
-		if(vorgID.size() == 0) {
-			sb.append("-");
-		}
-		for(int i = 0; i < vorgID.size(); i++) {
-			sb.append(vorgID.get(i));
-			if(i < (vorgID.size()-1)) {
-				sb.append(", ");
-			}
-		}
-		sb.append("; ");
-		if(nachfID.size() == 0) {
-			sb.append("-");
-		}
-		for(int i = 0; i < nachfID.size(); i++) {
-			sb.append(nachfID.get(i));
-			if(i < (nachfID.size()-1)) {
-				sb.append(", ");
-			}
-		}
-		
-		sb.append("; "+ faz);
+				
+		sb.append(faz);
 		sb.append("; "+ fez);
 		
 		sb.append("; "+ saz);

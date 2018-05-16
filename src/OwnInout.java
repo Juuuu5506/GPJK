@@ -18,7 +18,6 @@ public class OwnInout implements Inout {
 		ArrayList<Node> nodes = new ArrayList<>();
 		String[] splited;
 		String[] hilfsString;
-		ArrayList<Integer> hilfsInteger = new ArrayList<>();
 		int id;
 		String bez;
 		int d;
@@ -27,29 +26,40 @@ public class OwnInout implements Inout {
 		int row = 0;
 		try {
 			String line = br.readLine();
-			row+=1;
 			while (line != null) {
-				
+				row+=1;
+				System.out.println(row);
 				line.trim();
-				if (line.isEmpty()) {
+				if (line.trim().isEmpty()) {
 
-				} else if (line.startsWith("//+")) {
+				} else if (line.trim().startsWith("//+")) {
 					// Es ist die Überschrift
 					heading += " "+line.substring(3).trim();
-				} else if (line.startsWith("//")) {
+				} else if (line.trim().startsWith("//")) {
+					System.out.println("Im Kommentar");
 					// Es ist ein Kommentar
 				} else {
 					// Ein Knoten
 					splited = line.split(";");
 					if (splited.length < 5) {
+						System.out.println("Bin in unter 5");
+
 						throw new SyntaxException(row+"");
 						// Schwerwiegende fehlerhafte Eingabe der Semikoli.
 						// Wäre es mehr als fünf würde der Rest ignoriert werden.
 					} else {
 						id = Integer.parseInt(splited[0].trim());
+						if(id < 0) {
+							System.out.println("Bin in id");
+							throw new SyntaxException(row+"");
+						}
 						bez = splited[1].trim();
 						d = Integer.parseInt(splited[2].trim());
+						if(d < 0) {
+							System.out.println("Bin in d");
 
+							throw new SyntaxException(row+"");
+						}
 						if (splited[3].trim().equals("-")) {
 							//Kein Vorgängerknoten
 						} else {
@@ -80,8 +90,10 @@ public class OwnInout implements Inout {
 			br.close();
 			return nodes;
 		} catch (IOException e) {
+			br.close();
 			throw e;
 		} catch (NumberFormatException nfe) {
+			br.close();
 			throw new SyntaxException(row+"");
 		}		
 	}
@@ -94,7 +106,7 @@ public class OwnInout implements Inout {
 	public void printFinal(Graph graph, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
 		ArrayList<Node> starters = graph.getStartNodes();
 		ArrayList<Node> enders = graph.getEndNodes();
-		PrintWriter pw = new PrintWriter(fileName, "UTF-8");
+		PrintWriter pw = new PrintWriter(".\\Ergebnisse\\"+fileName, "UTF-8");
 		pw.println(heading);
 		pw.println();
 		pw.println("Vorgangsnummer; Vorgangsbezeichnung; D; FAZ; FEZ; SAZ; SEZ; GP; FP");
@@ -119,7 +131,7 @@ public class OwnInout implements Inout {
 		}
 		
 		pw.println();
-		pw.print("Gesamtdauer: ");
+		pw.print("Mindestgesamtdauer: ");
 		pw.print(graph.getMaxAusf());
 		
 		pw.println();
@@ -138,13 +150,13 @@ public class OwnInout implements Inout {
 	}
 	
 	public void printFileNotFound(String notFoundFile, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter pw = new PrintWriter(fileName, "UTF-8");
+		PrintWriter pw = new PrintWriter(".\\Ergebnisse\\"+fileName, "UTF-8");
 		pw.println("Die Datei "+ notFoundFile+" wurde nicht gefunden.");
 		pw.close();
 	}
 	
 	public void printException(String exception, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter pw = new PrintWriter(fileName, "UTF-8");
+		PrintWriter pw = new PrintWriter(".\\Ergebnisse\\"+fileName, "UTF-8");
 		pw.println(exception);
 		pw.close();
 	}
@@ -152,8 +164,18 @@ public class OwnInout implements Inout {
 	@Override
 	public void printCycleException(ArrayList<Node> path, String fileName)
 			throws FileNotFoundException, UnsupportedEncodingException {
-		// TODO Auto-generated method stub
-		
+		PrintWriter pw = new PrintWriter(".\\Ergebnisse\\"+fileName, "UTF-8");
+		pw.println(heading);
+		pw.println();
+		pw.println("Berechnung nicht möglich");
+		pw.print("Zyklus erkannt: ");
+		for(int i = 0; i < path.size(); i++) {
+			pw.print(path.get(i).getId());
+			if(i < path.size()-1) {
+				pw.print("->");
+			}
+		}	
+		pw.close();
 	}
 
 }
