@@ -1,3 +1,4 @@
+package view;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +8,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import exception.SyntaxException;
+import model.Graph;
+import model.Node;
 
 public class OwnInout implements Inout {
 

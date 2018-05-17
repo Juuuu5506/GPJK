@@ -1,10 +1,16 @@
+package controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import javax.tools.DiagnosticListener;
+import exception.SameIDException;
+import exception.SyntaxException;
+import model.Graph;
+import model.Node;
+import view.Inout;
+import view.OwnInout;
 
 public class OwnController implements Controller {
 

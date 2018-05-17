@@ -1,3 +1,4 @@
+package exception;
 
 public class SyntaxException extends Exception{
 
