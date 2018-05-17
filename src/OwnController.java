@@ -140,8 +140,7 @@ public class OwnController implements Controller {
 		}
 
 		graph.setMaxAusf(maxAusf);
-
-		while (next.size() > 0 && counter < 400) {
+		while (next.size() > 0 && counter < Integer.MAX_VALUE) {
 			n = next.get(0);
 			n.setSaz(n.getSez() - n.getD());
 			for (int i : n.getVorgID()) {
@@ -163,10 +162,11 @@ public class OwnController implements Controller {
 			counter++;
 		}
 
-		if (graph.missedSecPhase().size() > 0 || counter == 400) {
+		if (graph.missedSecPhase().size() > 0 || counter == Integer.MAX_VALUE) {
 			try {
 				inout.printException("Es existiert ein Fehler in den Vorgängerangaben der Knoten.",
 						fileWithoutEnding + ".err");
+				System.exit(0);
 			} catch (FileNotFoundException | UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -227,7 +227,6 @@ public class OwnController implements Controller {
 				if (!ending) {
 					if (tn.isEndingNode()) {
 						ending = true;
-						crPath.add(tn);
 						tn = mid;
 					} else {
 						for (int i : tn.getNachfID()) {

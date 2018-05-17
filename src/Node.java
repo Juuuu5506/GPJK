@@ -161,9 +161,9 @@ public class Node {
 		if(increased < 3) {
 			return false;
 		}
-		if(((thrLastFazIncrease >= d) && (thrLastFazIncrease >= 10)) &&
-			((secLastFazIncrease >= d) && (secLastFazIncrease >= 10)) &&
-			((lastFazIncrease >= d) && (lastFazIncrease >= 10)) ||
+		if(((thrLastFazIncrease >= d) && (thrLastFazIncrease >= 8)) &&
+			((secLastFazIncrease >= d) && (secLastFazIncrease >= 8)) &&
+			((lastFazIncrease >= d) && (lastFazIncrease >= 8)) ||
 								increased > 50) {
 			return true;			
 		} else {
