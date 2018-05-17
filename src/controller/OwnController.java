@@ -230,11 +230,12 @@ public class OwnController implements Controller {
 
 			endless: while (true) {
 				criticalsLeft.remove(tn);
-				if (!ending) {
-					if(tn.isEndingNode() && tn.isStartingNode()) {
+				if(tn.isEndingNode() && tn.isStartingNode()) {
 						ending = true;
 						beginning = true;
-					} else if (tn.isEndingNode()) {
+				}
+				if (!ending) {
+					 if (tn.isEndingNode()) {
 						ending = true;
 						tn = mid;
 					} else {
