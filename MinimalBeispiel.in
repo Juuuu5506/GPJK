@@ -1,0 +1,6 @@
+//*************************************
+//+ Test eines Minimalbeispiels
+//*************************************
+//Vorgangsnummer; Vorgangsbezeichnung; Dauer; Vorgänger; Nachfolger
+
+1; Anfang; 5; -; -

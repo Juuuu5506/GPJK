@@ -224,16 +224,13 @@ public class OwnController implements Controller {
 			crPath.add(tn);
 			if (tn.isEndingNode()) { // Wenn man zufällig einen Endknoten hat.
 				ending = true;
-			} else if (tn.isStartingNode()) { // Wenn man zufällig einen Anfangsknoten hat.
+			} 
+			if (tn.isStartingNode()) { // Wenn man zufällig einen Anfangsknoten hat.
 				beginning = true;
 			}
 
 			endless: while (true) {
 				criticalsLeft.remove(tn);
-				if(tn.isEndingNode() && tn.isStartingNode()) {
-						ending = true;
-						beginning = true;
-				}
 				if (!ending) {
 					 if (tn.isEndingNode()) {
 						ending = true;
